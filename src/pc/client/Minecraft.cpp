@@ -1276,6 +1276,12 @@ void Minecraft::runTick()
         worldsToDelete.clear();
     }
 
+#ifdef MC_IOS
+    // CHNKS overlay button (game thread): flip the chunk-border overlay directly.
+    if (::iosapp::consumeChunkBordersToggle())
+        gameSettings->ofShowChunkBorders = !gameSettings->ofShowChunkBorders;
+#endif
+
     if (ticksRan == 6000)
         func_28001_B();
 

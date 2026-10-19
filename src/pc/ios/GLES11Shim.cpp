@@ -1295,11 +1295,8 @@ void playListRef(GLuint id, int depth)
 
 void playBaked(const BakedList &bk, int depth)
 {
-	g_playLists.fetch_add(1, std::memory_order_relaxed);
 	for (const BakedCmd &c : bk.cmds)
 	{
-		if (c.kind == BakedCmd::K_DRAW)
-			g_playDraws.fetch_add(1, std::memory_order_relaxed);
 		switch (c.kind)
 		{
 			case BakedCmd::K_BINDTEX:
@@ -1313,8 +1310,8 @@ void playBaked(const BakedList &bk, int depth)
 				break;
 			case BakedCmd::K_RAW:
 			{
-				Words tmp = c.rawWords;
-				Reader rr{tmp.data(), tmp.data() + tmp.size(), 0};
+				const uint32_t *rp = c.rawWords.data();
+				Reader rr{rp, rp + c.rawWords.size(), 0};
 				executeOp(c.header, rr);
 				break;
 			}
@@ -1510,38 +1507,11 @@ void replayList(GLuint list, int depth)
 	if (itL == lists().end())
 		return;
 
-	// One-shot op-stream dump: shows exactly what a recorded chunk list
-	// contains (matrix ops + draw) so position bugs are visible, not guessed.
-	{
-		static std::atomic<uint32_t> dbgDump{0};
-		if (depth == 0 && itL->second.size() >= 2000 && dbgDump.fetch_add(1) < 8)
-		{
-			const Words &w = itL->second;
-			(void)0;
-			for (size_t q = 0; q < w.size() && q < 8; q++)
-				fprintf(stderr, " %08x", w[q]);
-			fprintf(stderr, " tail:");
-			for (size_t q = (w.size() > 8 ? w.size() - 8 : 0); q < w.size(); q++)
-				fprintf(stderr, " %08x", w[q]);
-			fprintf(stderr, "\n");
-		}
-	}
-
-bakeAndReplayDisabled:
-	{
-		size_t before = g_mat.stack[0].size();
-		interpretStream(itL->second, depth);
-		size_t after = g_mat.stack[0].size();
-		if (depth == 0 && after != before)
-		{
-			static std::atomic<int> d {0};
-			if (d.fetch_add(1) < 10)
-				(void)0;
-		}
-	}
-	(void)itL;
+	// Live interpretation. (The pre-parsed "bake" path was tried and re-enabled
+	// for performance, but it corrupted chunk/mob geometry — lose chunks and
+	// jittering mobs — so it stays disabled until it's actually fixed.)
+	interpretStream(itL->second, depth);
 }
-
 } // namespace
 
 extern "C" {

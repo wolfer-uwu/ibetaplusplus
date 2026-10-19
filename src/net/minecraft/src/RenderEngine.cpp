@@ -5,6 +5,9 @@
 #include <iostream>
 
 #include "GameSettings.h"
+#include "GameResources.h"
+#include <filesystem>
+#include <fstream>
 #include "GLAllocation.h"
 #include "TextureFX.h"
 #include "TexturePackBase.h"
@@ -99,6 +102,17 @@ int_t RenderEngine::getTexture(const std::string &s)
 	if (it != textureMap.end())
 		return it->second;
 
+	// Custom player skin: "skin.png" next to the executable (Documents/ on iOS)
+	// replaces the default player texture (/mob/char.png).
+	std::ifstream customSkin;
+	bool useCustomSkin = false;
+	if (s == "/mob/char.png" || s == "mob/char.png")
+	{
+		std::string skinPath = (std::filesystem::path(GameResources::getExeDir()) / "skin.png").string();
+		customSkin.open(skinPath, std::ios::binary);
+		useCustomSkin = customSkin.good();
+	}
+
 	std::vector<int_t> single(1);
 	GLAllocation::generateTextureNames(single);
 	int_t texture = single[0];
@@ -125,6 +139,9 @@ int_t RenderEngine::getTexture(const std::string &s)
 		{
 			image = readTextureImage(texturepackbase->getResourceAsStream(s));
 		}
+		if (useCustomSkin)
+			image = readTextureImage(&customSkin);
+
 		// setupTexture() reads clampTexture/blurTexture to pick GL_CLAMP/GL_LINEAR, so it MUST run
 		// while the flags are still set; reset them AFTER (as Java does), not inside the branch above.
 		setupTexture(image ? image.get() : missingTextureImage.get(), texture);

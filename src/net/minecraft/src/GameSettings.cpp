@@ -13,8 +13,9 @@
 #include "RenderGlobal.h"
 #include "RenderBlocks.h"
 
-const char *GameSettings::RENDER_DISTANCES[4] = {
-	"options.renderDistance.far", "options.renderDistance.normal", "options.renderDistance.short", "options.renderDistance.tiny"
+const char *GameSettings::RENDER_DISTANCES[5] = {
+	"options.renderDistance.far", "options.renderDistance.normal", "options.renderDistance.short", "options.renderDistance.tiny",
+	"iPod Touch" // literal: no lang key -> translateKey() echoes it back
 };
 
 const char *GameSettings::DIFFICULTIES[4] = {
@@ -104,7 +105,15 @@ void GameSettings::setDefaults()
 	ofSmoothFps = false;
 	ofSmoothInput = false;
 	ofBrightness = 0.0f;
-	ofAoLevel = 0.0f;
+#if defined(__ARM_ARCH)
+	ofAoLevel = 0.0f;   // Smooth Lighting OFF by default on mobile
+#else
+	ofAoLevel = 1.0f;
+#endif
+	// Keep the boolean in lockstep with the slider: previously ambientOcclusion
+	// defaulted true while ofAoLevel defaulted 0, so it rendered smooth lighting
+	// even though the option read "off".
+	ambientOcclusion = (ofAoLevel > 0.0f);
 	ofClouds = 0;
 	ofCloudsHeight = 0.0f;
 	ofTrees = 0;
@@ -206,7 +215,7 @@ void GameSettings::setOptionValue(const EnumOptions *enumoptions, int_t i)
 	if (enumoptions == EnumOptions::INVERT_MOUSE)
 		invertMouse = !invertMouse;
 	if (enumoptions == EnumOptions::RENDER_DISTANCE)
-		renderDistance = renderDistance + i & 3;
+		renderDistance = ((renderDistance + i) % 5 + 5) % 5;
 	if (enumoptions == EnumOptions::GUI_SCALE)
 		guiScale = guiScale + i & 3;
 	if (enumoptions == EnumOptions::VIEW_BOBBING)

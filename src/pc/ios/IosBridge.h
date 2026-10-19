@@ -69,6 +69,15 @@ std::string activeInputText();
 bool takePendingKeyboardShow();
 bool takePendingFieldBlur();
 
+// Open/close the native Touch Controls panel (from the Options "Controls" button).
+void requestTouchControlsPanel();
+
+// Overlay CHNKS button: request a chunk-border overlay toggle. The game thread
+// consumes it and flips GameSettings::ofShowChunkBorders directly, avoiding the
+// unreliable F3+G key-combo emulation.
+void requestChunkBordersToggle();
+bool consumeChunkBordersToggle();
+
 // Overlay visibility mode, written by the game thread each frame:
 // 0 = main menu, 1 = in world no screen, 2 = in world with a GUI screen open.
 void setOverlayMode(int mode);

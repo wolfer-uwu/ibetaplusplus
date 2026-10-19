@@ -176,7 +176,8 @@ void EntityRenderer::updateRenderer()
         MathHelper::floor_double(mc->renderViewEntity->posZ)
     );
     
-    float renderDistFactor = (float)(3 - mc->gameSettings->renderDistance) / 3.0f;
+    int_t rdClamp = mc->gameSettings->renderDistance; if (rdClamp > 3) rdClamp = 3;
+    float renderDistFactor = (float)(3 - rdClamp) / 3.0f;
     float targetFog = lightBrightness * (1.0f - renderDistFactor) + renderDistFactor;
     
     fogColor1 += (targetFog - fogColor1) * 0.1f;
@@ -1343,7 +1344,8 @@ void EntityRenderer::updateFogColor(float partialTicks)
     World* world = mc->theWorld;
     EntityLiving* entityliving = mc->renderViewEntity;
     
-    float fogDistanceFactor = 1.0f / (float)(4 - mc->gameSettings->renderDistance);
+    int_t rdClamp2 = mc->gameSettings->renderDistance; if (rdClamp2 > 3) rdClamp2 = 3;
+    float fogDistanceFactor = 1.0f / (float)(4 - rdClamp2);
     fogDistanceFactor = 1.0f - (float)pow(fogDistanceFactor, 0.25);
     
     Vec3D* skyColor = world->getSkyColor(mc->renderViewEntity, partialTicks);

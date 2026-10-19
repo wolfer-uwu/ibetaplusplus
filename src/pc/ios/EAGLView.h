@@ -33,10 +33,12 @@
 	GLuint _depthRenderbuffer;
 	GLint _backingWidth;
 	GLint _backingHeight;
+	volatile BOOL _fbNeedsRebuild; // set by -layoutSubviews (main thread)
 }
 
 - (BOOL)createFramebufferWithContext:(EAGLContext *)context;
 - (void)destroyFramebuffer;
 - (void)presentFrame;
+- (void)openTouchControls; // Touch Controls settings panel (idempotent toggle)
 
 @end

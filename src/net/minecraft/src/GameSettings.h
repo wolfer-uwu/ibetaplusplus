@@ -44,7 +44,7 @@ private:
 	std::string translateKey(const std::u16string &s);
 	static std::string keyName(int_t keyCode);
 
-	static const char *RENDER_DISTANCES[4];
+	static const char *RENDER_DISTANCES[5];
 	static const char *DIFFICULTIES[4];
 	static const char *GUISCALES[4];
 	static const char *LIMIT_FRAMERATES[3];
