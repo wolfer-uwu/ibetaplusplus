@@ -64,6 +64,11 @@ printf 'APPL????' > "$OUT_APP/PkgInfo"
 #   Documents/resources   (optional sound/music)
 # The app shows an alert and quits until Documents/assets/font.txt exists.
 
+# Touch-control button textures (custom, our own art — safe to bundle).
+if [ -d "$ROOT/ios/gui_btns" ]; then
+    cp -r "$ROOT/ios/gui_btns" "$OUT_APP/gui_btns"
+fi
+
 if command -v ldid >/dev/null 2>&1; then
     # Entitlements match the working jailbreak apps (Codepad2 et al.); without
     # them some legacy platforms apply a stricter seatbelt profile.

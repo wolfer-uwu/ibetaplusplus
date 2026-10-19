@@ -13,6 +13,9 @@
 #include "GuiButton.h"
 #include "GuiVideoSettings.h"
 #include "GuiControls.h"
+#ifdef MC_IOS
+#include "IosBridge.h"
+#endif
 #include "GameSettings.h"
 #include "StringTranslate.h"
 #include "Minecraft.h"
@@ -89,7 +92,13 @@ void GuiOptions::actionPerformed(GuiButton *button)
 	if (button->id == 100)
 	{
 		mc->gameSettings->saveOptions();
+#ifdef MC_IOS
+		// iOS: the on-screen touch controls live in a native panel, so the
+		// "Controls…" button opens that instead of the keyboard-bind editor.
+		::iosapp::requestTouchControlsPanel();
+#else
 		mc->displayGuiScreen(new GuiControls(this, options));
+#endif
 	}
 	if (button->id == 200)
 	{

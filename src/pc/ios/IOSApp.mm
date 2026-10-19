@@ -441,6 +441,18 @@ bool takePendingFieldBlur()
 	return g_blurField.exchange(false);
 }
 
+void requestTouchControlsPanel()
+{
+	dispatch_async(dispatch_get_main_queue(), ^{
+		if (g_view != nil)
+			[g_view openTouchControls];
+	});
+}
+
+static std::atomic<bool> g_chunkBordersToggle{false};
+void requestChunkBordersToggle() { g_chunkBordersToggle.store(true); }
+bool consumeChunkBordersToggle() { return g_chunkBordersToggle.exchange(false); }
+
 void setOverlayMode(int mode) { g_overlayMode.store(mode); }
 int overlayMode() { return g_overlayMode.load(); }
 
@@ -732,6 +744,12 @@ static void spawnGameThreadWithBigStack()
 		_gameStarted = YES;
 		spawnGameThreadWithBigStack();
 	}
+}
+
+- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
+{
+	(void)application;
+	NSLog(@"iB++: memory warning received (low RAM / jetsam pressure)");
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application

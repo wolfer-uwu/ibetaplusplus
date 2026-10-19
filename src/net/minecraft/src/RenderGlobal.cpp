@@ -278,7 +278,7 @@ void RenderGlobal::loadRenderers()
 		delete[] sortedWorldRenderers;
 	}
 
-	int_t j = 64 << (3 - renderDistance);
+	int_t j = (renderDistance >= 4) ? 32 : (64 << (3 - renderDistance)); // 4 = "iPod Touch" tier
 	if (j > 400)
 		j = 400;
 
