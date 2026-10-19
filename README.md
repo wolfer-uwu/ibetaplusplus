@@ -1,6 +1,6 @@
 # iBetaPlusPlus
 
-iBetaPlusPlus is a heavily modified C++ implementation of classic Minecraft-era gameplay (Beta 1.7.3) designed around portability, low-end hardware, and platform-specific optimization.
+iBetaPlusPlus is a heavily modified C++ implementation of classic Beta 1.7.3-era gameplay designed around portability, low-end hardware, and platform-specific optimization.
 
 This repository is not intended to be a line-for-line source translation. The runtime, platform layers, rendering paths, input backends, storage systems, user interface, asset loading, and memory policies have been extensively reworked for the needs of this project.
 
@@ -14,7 +14,7 @@ This repository is not intended to be a line-for-line source translation. The ru
 
 ## Legal and disclaimers
 
-iBetaPlusPlus is an unofficial fan project: a C++ port of classic Minecraft-era (Beta 1.7.3) gameplay, provided for personal, educational, and preservation use.
+iBetaPlusPlus is an unofficial fan project: a C++ port of classic Beta 1.7.3-era gameplay, provided for personal, educational, and preservation use.
 
 This project is **not affiliated with, endorsed by, sponsored by, approved by, or associated with** Mojang Studios or Microsoft. "Minecraft", "Mojang", and all related names, logos, and assets are trademarks and/or copyright of Mojang Studios / Microsoft and are used here only descriptively to identify the game whose behavior this project reproduces.
 
