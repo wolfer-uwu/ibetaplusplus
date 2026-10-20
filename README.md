@@ -1,5 +1,7 @@
 # iBetaPlusPlus
 
+## I’ll NOT UPLOAD ANY IPA, the latest version always can be cloned and compiled by you (instructions will be soon)
+
 iBetaPlusPlus is a heavily modified C++ implementation of classic Beta 1.7.3-era gameplay designed around portability, low-end hardware, and platform-specific optimization.
 
 This repository is not intended to be a line-for-line source translation. The runtime, platform layers, rendering paths, input backends, storage systems, user interface, asset loading, and memory policies have been extensively reworked for the needs of this project.
